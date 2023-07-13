@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String      @id @default(uuid())
+  createdAt DateTime    @default(now())
+  name      String?
+  username  String      @unique
+  password  String
+  Developer Developer[]
+}
+
+model Company {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  username   String
+  password   String
+  Businesses Business[]
+}
+
+model Business {
+  id           String    @id @default(uuid())
+  company_name String    @db.VarChar(255)
+  location     String
+  industry     String
+  description  String
+  present      Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id])
+  Projects     Project[]
+}
+
+enum Status {
+  COMPLETED
+  INPROGRESS
+}
+
+model Project {
+  id           String   @id @default(uuid())
+  project_name String   @db.VarChar(255)
+  counter      Boolean  @default(true)
+  description  String
+  timeframe    String
+  technology   String[]
+  devlist      String[]
+  status       Status   @default(INPROGRESS)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  businessId   String
+  business     Business @relation(fields: [businessId], references: [id])
+}
+
+model Developer {
+  id             String   @id @default(uuid())
+  dev_first_name String   @db.VarChar(255)
+  dev_last_name  String   @db.VarChar(255)
+  skills         String[]
+  bio            String
+  background     String
+  // completed_projects String
+  counter        Boolean  @default(true)
+  portfolio_link String?
+  address        String?
+  phone          String?  @unique
+  email          String?  @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId String
+  users  User   @relation(fields: [userId], references: [id])
+}
