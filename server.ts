@@ -52,6 +52,6 @@ app.post('/', (req, res) =>{
 
 app.use('/o/api',orgProtect,orgRouter)
 app.use('/u/api',protect, userRouter)
-app.use('/get', getRouter)
+app.use('/api', getRouter)
 
 export default app;

@@ -19,7 +19,8 @@ handleInputErrors,patchProject)
 ///////////////////////////////////////         Developer Routes            ///////////////////////////
 
 userRouter.post('/dev' ,
-body('dev_name').isString(),
+body('dev_fname').isString(),
+body('dev_lname').isString(),
 body('skills').isArray(),
 body('bio').isString(),
 body('background').isString(),

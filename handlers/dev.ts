@@ -50,28 +50,40 @@ export const getOneDeveloper = async (req, res) => {
 
 export const createDeveloper = async (req, res) => {
     try{
-        if (!req.user || !req.user.id) {
-             // Handle the case when req.company or req.company.id is undefined
-             res.json({message:"company not signed in"})
-             return
-           }
-        const created = await prisma.developer.create({
-            data: {
-                dev_first_name  : req.body.dev_fname,
-                dev_last_name  : req.body.dev_lname,
-                bio       :  req.body.bio,
-                background  : req.body.background,
-                portfolio_link : req.body.portfolio_link,
-                address    : req.body.address,
-                phone      : req.body.phone,
-                email      : req.body.email,
-                userId : req.user.id
-            },
-         })
-    res.json({ data: created })
+        const checkDev = await prisma.developer.findFirst({
+          where:{
+            userId:req.user.id
+          }
+        })
+        // res.json({checkDev})
+        if (checkDev !== null) {
+            res.json({
+                message :"developer already exists",
+                dev:"true"
+            })
+            return
+        }else{
+            const created = await prisma.developer.create({
+                data: {
+                    dev_first_name  : req.body.dev_fname,
+                    dev_last_name  : req.body.dev_lname,
+                    bio       :  req.body.bio,
+                    skills : req.body.skills,
+                    background  : req.body.background,
+                    portfolio_link : req.body.portfolio_link,
+                    address    : req.body.address,
+                    phone      : req.body.phone,
+                    email      : req.body.email,
+                    userId : req.user.id
+                },
+             })
+        res.json({ data: created })
+        }
+        
+        
     }catch(error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' })
+        res.status(500).json({ error })
       }
    }
 

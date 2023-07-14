@@ -11,11 +11,11 @@ const orgRouter = Router()
 //////////////////////////////////////               Project            //////////////////////////////////////
 
 
-orgRouter.post('/project', 
+orgRouter.post('/project/:id', 
 body('project_name').isString(),
 body('description').isString(),
 body('timeframe').isString(),
-body('technology').isString(),
+// body('technology').isString(),
 handleInputErrors, createProject)
 
 

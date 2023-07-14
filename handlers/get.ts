@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../prisma/db"
 
 //get all
@@ -5,7 +6,9 @@ export const getCompanies = async (req, res) => {
      try {
        const companies = await prisma.business.findMany({
          where: {
-           id: req.company.id
+           present: true
+         },include:{
+          Projects:true
          }
        });
    
@@ -17,20 +20,12 @@ export const getCompanies = async (req, res) => {
    };
 
    export const getDevelopers = async(req,res) =>{
-     const company = await prisma.developer.findMany({
-         where:{
-              counter:true
-         }
-     })
+     const company = await prisma.developer.findMany()
      res.json({data: company,})
     }
 
     export const getProjects = async(req,res) =>{
-     const project = await prisma.project.findMany({
-         where:{
-              counter: true
-         }
-     })
+     const project = await prisma.project.findMany()
      res.json({data: project,})
     }
 
@@ -80,31 +75,30 @@ export const getCompanies = async (req, res) => {
 
 
    
-
-//     export const getAscDevelopers = async(req,res) =>{
-//       const company = await prisma.developer.findMany({
-//           where:{
-//                counter:true
-//           },
-//           orderBy: {
-//             dev_name: 'asc',
-//           }
-//       })
-//       res.json({data: company,})
-
-//      }
+export const getAscDevelopers = async (req, res) => {
+  try {
+    const developers = await prisma.developer.findMany({
+      orderBy:{
+        dev_first_name:'desc'
+      }
+})
+    res.json({ data: developers });
+  } catch (error) {
+    console.error('Error fetching developers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
      
-//      export const getDescDevelopers = async(req,res) =>{
-//       const company = await prisma.developer.findMany({
-//           where:{
-//                counter:true
-//           },
-//           orderBy: {
-//             dev_name: 'desc',
-//           }
-//       })
-//       res.json({data: company,})
-//      }
+     export const getDescDevelopers = async(req,res) =>{
+      const company = await prisma.developer.findMany({
+        where: {
+          skills: {
+            has: 'HTML'
+          }
+        }
+      })
+      res.json({data: company})
+     }
 
 //      export const getAscProjects = async(req,res) =>{
 //       const project = await prisma.project.findMany({

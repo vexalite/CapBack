@@ -74,7 +74,8 @@ model Developer {
   address        String?
   phone          String?  @unique
   email          String?  @unique
-  createdAt      DateTime @default(now())
+  // createdAt      DateTime @default(now())
+  createdAt      DateTime @default(dbgenerated("CURRENT_TIMESTAMP"))
   updatedAt      DateTime @updatedAt
 
   userId String

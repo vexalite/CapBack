@@ -10,7 +10,7 @@ import prisma from "../prisma/db"
 //  res.json({data: project,})
 // }
 
-//get one
+// get one
 
 export const getOneProject = async(req,res) =>{
      const id = req.params.id
@@ -28,6 +28,19 @@ export const getOneProject = async(req,res) =>{
 
 
 export const createProject = async (req,res)=>{
+     try{
+     if (!req.company || !req.company.id) {
+          // Handle the case when req.company or req.company.id is undefined
+          res.json({message:"company not signed in"})
+          console.log(req.company.id)
+          return
+        }
+     //    const find = prisma.company.findUnique({
+     //      where:{
+     //           id : req.params.id,
+     //      }
+     //    })
+     //    res.json({data :find})
      const created = await prisma.project.create({
          data: {
              project_name: req.body.project_name,
@@ -35,10 +48,14 @@ export const createProject = async (req,res)=>{
              technology: req.body.technology,
              description: req.body.description,
              devlist: req.body.devlist,
-             businessId: req.company.id
+             businessId: req.params.id
          },
      })
      res.json({data :created})
+}catch(error) {
+     console.error('Error:', error)
+     res.status(500).json({ error: 'Internal server error' })
+   }
 }
 
 export const updateProject = async (req,res)=>{

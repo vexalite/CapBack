@@ -8,7 +8,7 @@ export const comparePasswords = (password, hash) =>{
 }
 
 export const hashPassword = (password) => {
-     return bcrypt.hash(password, 6)
+     return bcrypt.hash(password, 10)
 }
 
 
@@ -46,11 +46,11 @@ if (!token){
 try{
      const company = jwt.verify(token, process.env.JWT_SECRET_KEY)
      req.company = company
-    //  console.log('try',com)
+     console.log('try',company)
      next()
 } catch (e){
-     // console.error(e)
-    //  console.log(token_c)
+     console.error(e)
+     console.log(token)
      res.status(400)
      res.json({message: 'invalid company token '})
      return
