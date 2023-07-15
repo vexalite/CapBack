@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/vexalite/CapBack#readme",
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "4.16.2",
     "@types/node": "^20.4.2",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.37.3",
