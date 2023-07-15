@@ -46,7 +46,7 @@ export const signin = async(req,res) =>{
      })
      if(!user){
           res.status(401)
-          res.json({message:"wrong username"})
+          res.json({message:"Invalid Credentials"})
           return
      }
 
@@ -54,11 +54,25 @@ export const signin = async(req,res) =>{
     
           if (!isValid){
                
-               res.json({message:'wrong password'})
+               res.json({message:'Invalid Credentials'})
                return
           }
-
           const token = createJWT(user)
-          res.json({token})
-       
+          // console.log(user)
+          const checkDev = await prisma.developer.findFirst({
+               where:{
+                 userId:user.id
+               }
+             })
+         
+          if (checkDev !== null) {
+               res.json({token,
+                    message :"developer already exists",
+                          dev:"true"
+               })}else{
+                    res.json({token,
+                         message :"developer doesn't exists",
+                               dev:"false"
+                    }) 
+               }
 }

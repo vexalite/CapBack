@@ -47,6 +47,7 @@ export const createProject = async (req,res)=>{
              timeframe: req.body.timeframe,
              technology: req.body.technology,
              description: req.body.description,
+             status:req.body.status,
              devlist: req.body.devlist,
              businessId: req.params.id
          },

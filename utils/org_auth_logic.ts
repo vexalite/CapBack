@@ -29,7 +29,7 @@ export const createNewCompany = async (req, res) => {
           const token = createJWT(newCompany);
           res.json({ token });
         } else {
-          res.json({ message: "User already exists" });
+          res.json({ message: "Organization already exists" });
         }
 
 }
@@ -45,7 +45,7 @@ export const signinCompany = async(req,res) =>{
      })
      if(!company){
           res.status(401)
-          res.json({message:"wrong username"})
+          res.json({message:"Invalid Credentials"})
           return
      }
 
@@ -53,7 +53,7 @@ export const signinCompany = async(req,res) =>{
     
           if (!isValid){
                
-               res.json({message:'wrong password'})
+               res.json({message:'Invalid Credentials'})
                return
           }
 

@@ -3,11 +3,11 @@ import { body,validationResult } from 'express-validator'
 import { handleInputErrors } from '../utils/middleware'
 import { patchProject } from '../handlers/project'
 import { createDeveloper, deleteDeveloper, updateDeveloper } from '../handlers/dev'
-
+import multer from 'multer';
 
 
 const userRouter = Router()
-
+const upload = multer({ dest: 'tmp/' });
 userRouter.patch('/project/:id' ,
 body('devlist').isString(),
 handleInputErrors,patchProject)
@@ -19,6 +19,7 @@ handleInputErrors,patchProject)
 ///////////////////////////////////////         Developer Routes            ///////////////////////////
 
 userRouter.post('/dev' ,
+upload.single('image'),
 body('dev_fname').isString(),
 body('dev_lname').isString(),
 body('skills').isArray(),
@@ -32,7 +33,7 @@ handleInputErrors,createDeveloper)
 
 userRouter.put('/dev/:id' ,
 body('dev_name').isString(),
-body('skills').isString(),
+body('skills').isArray(),
 body('bio').isString(),
 body('background').isString(),
 body('portfolio_link').optional(),

@@ -1,5 +1,11 @@
 import prisma from "../prisma/db"
 
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config({ 
+     cloud_name: 'dk3nocfdb', 
+     api_key: '532268971997591', 
+     api_secret: 'eWhVDDQveJUugM8nrVZwV2V5sX0' 
+   });
 //get all
 // export const getCompanies = async(req,res) =>{
 //  const company = await prisma.company.findUnique({
@@ -45,11 +51,10 @@ export const getOneCompany = async(req,res) =>{
 
 export const createCompany = async (req,res)=>{
      try{
-          if (!req.company || !req.company.id) {
-               // Handle the case when req.company or req.company.id is undefined
-               res.json({message:"company not signed in"})
-               return
-             }
+      let logoUrl = '';
+        if (req.file) {
+          const result = await cloudinary.uploader.upload(req.file.path);
+          logoUrl = result.secure_url;
      const created = await prisma.business.create({
           data:{
             company_name : req.body.company_name,
@@ -57,16 +62,16 @@ export const createCompany = async (req,res)=>{
             industry   : req.body.industry,
             description : req.body.description,
             companyId: req.company.id,
+            logoUrl:logoUrl
           },
      })
      res.json({data :created})
+}
 }catch(error) {
      console.error('Error:', error)
      res.status(500).json({ error: 'Internal server error' })
    }
-}
-
-
+     }
 export const updateCompany = async (req,res)=>{
      const updated = await prisma.business.update({
           where:{
