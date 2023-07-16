@@ -5,8 +5,8 @@ import prisma from "../prisma/db"
 export const getCompanies = async (req, res) => {
      try {
        const companies = await prisma.business.findMany({
-         where:{
-          id: req.company.id
+         include:{
+          Projects:true
          }
        });
    
