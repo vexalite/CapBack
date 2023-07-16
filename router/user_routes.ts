@@ -4,18 +4,19 @@ import { handleInputErrors } from '../utils/middleware'
 import { patchProject } from '../handlers/project'
 import { createDeveloper, deleteDeveloper, updateDeveloper } from '../handlers/dev'
 import multer from 'multer';
+import { patchBusiness } from '../handlers/org'
 
 
 const userRouter = Router()
 const upload = multer({ dest: 'tmp/' });
+
+///////////////////////////////////////////       Project            //////////////////////////////////
 userRouter.patch('/project/:id' ,
 body('devlist').isString(),
 handleInputErrors,patchProject)
 
-///////////////////////////////////////////        Business             //////////////////////////////////
 
-
-
+userRouter.patch('rateorg/:id', patchBusiness)
 ///////////////////////////////////////         Developer Routes            ///////////////////////////
 
 userRouter.post('/dev' ,

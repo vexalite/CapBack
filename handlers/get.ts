@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../prisma/db"
 
 //get all
-export const getCompanies = async (req, res) => {
+export const getBusinesses = async (req, res) => {
      try {
        const companies = await prisma.business.findMany({
          include:{

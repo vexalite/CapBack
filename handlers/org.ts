@@ -2,22 +2,28 @@ import prisma from "../prisma/db"
 
 import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config({ 
-     cloud_name: 'dk3nocfdb', 
-     api_key: '532268971997591', 
-     api_secret: 'eWhVDDQveJUugM8nrVZwV2V5sX0' 
+     cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.API_KEY, 
+    api_secret: process.env.API_SECRET 
    });
-//get all
-// export const getCompanies = async(req,res) =>{
-//  const company = await prisma.company.findUnique({
-//      where:{
-//           id: req.company.id
-//      },
-//      include:{
-//           Business: true
-//           }
-//  })
-//  res.json({data: company,})
-// }
+
+
+// get all
+export const getCompanies = async(req,res) =>{
+ const company = await prisma.company.findUnique({
+     where: {
+          id: req.company.id,
+        },
+        include: {
+          Businesses: {
+            include: {
+              Projects: true,
+            },
+          },
+        },
+ })
+ res.json({data: company,})
+}
 
 //get one
 
@@ -98,3 +104,37 @@ export const deleteCompany = async (req,res)=>{
      })
      res.json({data :deleted})
 }
+
+export const patchBusiness = async (req, res) => {
+     const { id } = req.params;
+   
+     try {
+       const existingProject = await prisma.business.findUnique({
+         where: {
+           id,
+         },
+       });
+   
+       if (!existingProject) {
+         return res.status(404).json({ error: 'Project not found' });
+       }
+   
+       const updatedRating = existingProject.rating.concat(req.body.rating || []);
+       const updatedTestimony = existingProject.testimonial.concat(req.body.testimonial || []);
+
+   
+       const updatedBusiness = await prisma.business.update({
+         where: {
+           id,
+         },
+         data: {
+           rating: updatedRating,
+           testimonial: updatedTestimony
+         },
+       });
+   
+       res.json({ data: updatedBusiness });
+     } catch (error) {
+       res.status(500).json({ error: 'Internal server error' });
+     }
+   };

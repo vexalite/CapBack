@@ -21,9 +21,9 @@ import { v2 as cloudinary } from 'cloudinary';
 //     api_secret: 'YOUR_API_SECRET',
 //   });
 cloudinary.config({ 
-    cloud_name: 'dk3nocfdb', 
-    api_key: '532268971997591', 
-    api_secret: 'eWhVDDQveJUugM8nrVZwV2V5sX0' 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.API_KEY, 
+    api_secret: process.env.API_SECRET 
   });
   
 //   const upload = multer({ dest: 'tmp/' });
@@ -42,7 +42,7 @@ cloudinary.config({
         });
         return;
       } else {
-        // Handle image upload to Cloudinary
+        
         let imageUrl = '';
         if (req.file) {
           const result = await cloudinary.uploader.upload(req.file.path);
@@ -59,7 +59,7 @@ cloudinary.config({
               address: req.body.address,
               phone: req.body.phone,
               email: req.body.email,
-              imageUrl: imageUrl, // Use the Cloudinary image URL here
+              imageUrl: imageUrl, 
               userId: req.user.id,
             },
           });
@@ -180,3 +180,38 @@ export const deleteDeveloper = async (req, res) => {
     })
     res.json({ data: deleted })
 }
+
+
+export const patchDev = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const existingProject = await prisma.developer.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingProject) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    const updatedRating = existingProject.rating.concat(req.body.rating || []);
+    const updatedTestimony = existingProject.testimonial.concat(req.body.testimonial || []);
+
+
+    const updatedDev = await prisma.developer.update({
+      where: {
+        id,
+      },
+      data: {
+        rating: updatedRating,
+        testimonial: updatedTestimony
+      },
+    });
+
+    res.json({ data: updatedDev });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

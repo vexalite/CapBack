@@ -2,13 +2,19 @@ import {Router} from 'express'
 import { body,validationResult } from 'express-validator'
 import { handleInputErrors } from '../utils/middleware'
 import { createProject, deleteProject, updateProject } from '../handlers/project'
-import { createCompany, deleteCompany, updateCompany } from '../handlers/org'
+import { createCompany, deleteCompany, getCompanies, updateCompany } from '../handlers/org'
 import multer from 'multer';
+import { patchDev } from '../handlers/dev'
 
 
 const orgRouter = Router()
 const upload = multer({ dest: 'tmp/' });
+
+
+orgRouter.patch('/ratedev/:id',patchDev)
 //////////////////////////////////////               Project            //////////////////////////////////////
+
+orgRouter.get('/company',getCompanies)
 
 
 orgRouter.post('/project/:id', 

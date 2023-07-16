@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { filterCss, filterDocker, filterHtml, filterJava, filterJs, filterMongodb, filterNode, filterPCss, filterPDocker, filterPHtml, filterPJava, filterPJs, filterPMongodb, filterPNode, filterPPython, filterPReact, filterPUiux, filterPython, filterReact, filterUiux, getAscCompanies, getAscDevelopers, getAscProjects, getCompanies, getDescCompanies, getDescDevelopers, getDescProjects, getDevelopers, getPriceAscDevelopers, getPriceAscProjects, getPriceDescDevelopers, getPriceDescProjects, getProjects } from '../handlers/get'
+import { filterCss, filterDocker, filterHtml, filterJava, filterJs, filterMongodb, filterNode, filterPCss, filterPDocker, filterPHtml, filterPJava, filterPJs, filterPMongodb, filterPNode, filterPPython, filterPReact, filterPUiux, filterPython, filterReact, filterUiux, getAscCompanies, getAscDevelopers, getAscProjects, getBusinesses, getDescCompanies, getDescDevelopers, getDescProjects, getDevelopers, getPriceAscDevelopers, getPriceAscProjects, getPriceDescDevelopers, getPriceDescProjects, getProjects } from '../handlers/get'
 import { getOneProject } from '../handlers/project'
 import { getOneDeveloper } from '../handlers/dev'
 import { getOneCompany } from '../handlers/org'
@@ -9,7 +9,7 @@ const getRouter = Router()
 //get all
 getRouter.get('/project' , getProjects)
 getRouter.get('/dev' ,getDevelopers)
-getRouter.get('/company' ,getCompanies)
+getRouter.get('/business' ,getBusinesses)
 
 
 //sort company
