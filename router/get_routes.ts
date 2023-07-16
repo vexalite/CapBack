@@ -12,7 +12,6 @@ getRouter.get('/dev' ,getDevelopers)
 getRouter.get('/company' ,getCompanies)
 
 
-
 //sort company
 getRouter.get('/company/sort=asc', getAscCompanies)
 getRouter.get('/company/sort=desc', getDescCompanies)
