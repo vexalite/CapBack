@@ -21,9 +21,9 @@ import { v2 as cloudinary } from 'cloudinary';
 //     api_secret: 'YOUR_API_SECRET',
 //   });
 cloudinary.config({ 
-    cloud_name: process.env.CLOUD_NAME, 
-    api_key: process.env.API_KEY, 
-    api_secret: process.env.API_SECRET 
+    cloud_name: 'dk3nocfdb', 
+    api_key: '532268971997591', 
+    api_secret: 'eWhVDDQveJUugM8nrVZwV2V5sX0' 
   });
   
 //   const upload = multer({ dest: 'tmp/' });
