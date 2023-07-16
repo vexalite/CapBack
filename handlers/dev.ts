@@ -151,10 +151,19 @@ export const getOneDeveloper = async (req, res) => {
 
 
 export const updateDeveloper = async (req, res) => {
+  try{
+    const checkuser = await prisma.developer.findFirst({
+      where:{
+        id: req.params.id
+      }
+    })
+    // console.log(req.user.id !== checkuser.userId)
+    if(req.user.id !== checkuser.userId){
+      res.status(400).json({'message': "invalid user"})
+    }else{
     const updated = await prisma.developer.update({
         where: {
             id: req.params.id
-            // belongsToId: req.user.id
         },
         data: {
             dev_first_name  : req.body.dev_fname,
@@ -170,9 +179,12 @@ export const updateDeveloper = async (req, res) => {
         }
     })
     res.json({ data: updated })
+  }
+}catch (error) {
+  console.error('Error:', error);
+  res.status(500).json({ error });
 }
-
-
+}
 export const deleteDeveloper = async (req, res) => {
     const deleted = await prisma.developer.delete({
         where: {

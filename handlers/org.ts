@@ -78,11 +78,21 @@ export const createCompany = async (req,res)=>{
      res.status(500).json({ error: 'Internal server error' })
    }
      }
+
+
 export const updateCompany = async (req,res)=>{
+     try{
+          const checkorg = await prisma.business.findFirst({
+               where:{
+                 id: req.params.id
+               }
+             })
+             if(req.user.id !== checkorg.companyId){
+               res.status(400).json({'message': "invalid user"})
+             }else{
      const updated = await prisma.business.update({
           where:{
                id : req.params.id
-               // belongsToId: req.user.id
           },
           data:{
             company_name : req.body.company_name,
@@ -93,7 +103,11 @@ export const updateCompany = async (req,res)=>{
      })
      res.json({data :updated})
 }
-
+}catch(error) {
+     console.error('Error:', error)
+     res.status(500).json({ error: 'Internal server error' })
+   }
+}
 
 export const deleteCompany = async (req,res)=>{
      const deleted = await prisma.business.delete({
