@@ -48,6 +48,7 @@ export const createProject = async (req,res)=>{
              technology: req.body.technology,
              description: req.body.description,
              status:req.body.status,
+             price: parseInt(req.body.price),
              devlist: req.body.devlist,
              businessId: req.params.id
          },
@@ -70,6 +71,7 @@ export const updateProject = async (req,res)=>{
              timeframe: req.body.timeframe,
              technology: req.body.technology,
              description: req.body.description,
+             price: parseInt(req.body.price),
              devlist: req.body.devlist,
           }
      })
