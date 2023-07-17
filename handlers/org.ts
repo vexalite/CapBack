@@ -110,6 +110,15 @@ export const updateCompany = async (req,res)=>{
 }
 
 export const deleteCompany = async (req,res)=>{
+  try{
+    const checkorg = await prisma.business.findFirst({
+         where:{
+           id: req.params.id
+         }
+       })
+       if(req.user.id !== checkorg.companyId){
+         res.status(400).json({'message': "invalid user"})
+       }else{
      const deleted = await prisma.business.delete({
           where:{
                id : req.params.id
@@ -117,6 +126,11 @@ export const deleteCompany = async (req,res)=>{
           },
      })
      res.json({data :deleted})
+}
+}catch(error) {
+  console.error('Error:', error)
+  res.status(500).json({ error: 'Internal server error' })
+}
 }
 
 export const patchBusiness = async (req, res) => {

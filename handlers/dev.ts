@@ -185,7 +185,19 @@ export const updateDeveloper = async (req, res) => {
   res.status(500).json({ error });
 }
 }
+
+
 export const deleteDeveloper = async (req, res) => {
+  try{
+    const checkuser = await prisma.developer.findFirst({
+      where:{
+        id: req.params.id
+      }
+    })
+    // console.log(req.user.id !== checkuser.userId)
+    if(req.user.id !== checkuser.userId){
+      res.status(400).json({'message': "invalid user"})
+    }else{
     const deleted = await prisma.developer.delete({
         where: {
             id: req.params.id
@@ -194,8 +206,11 @@ export const deleteDeveloper = async (req, res) => {
     })
     res.json({ data: deleted })
 }
-
-
+}catch (error) {
+  console.error('Error:', error);
+  res.status(500).json({ error });
+}
+}
 export const patchDev = async (req, res) => {
   const { id } = req.params;
 
