@@ -51,34 +51,28 @@ export const signin = async (req, res) => {
      }
 
      const isValid = await comparePasswords(req.body.password, user.password)
-
-     if (!isValid) {
-
-          res.json({ message: 'Invalid Credentials' })
-          return
-     }
-     const token = createJWT(user)
-     // console.log(user)
-     const checkDev = await prisma.developer.findFirst({
-          where: {
-               userId: user.id
+    
+          if (!isValid){
+               
+               res.json({message:'Invalid Credentials'})
+               return
           }
-     })
-
-     if (checkDev !== null) {
-          res.json({
-               token,
-               id: checkDev.id,
-               dev_first_name: checkDev.dev_first_name,
-               dev_last_name: checkDev.dev_last_name,
-               message : "developer already exists",
-               dev: "true"
-          })
-     } else {
-          res.json({
-               token,
-               message: "developer doesn't exists",
-               dev: "false"
-          })
-     }
+          const token = createJWT(user)
+          // console.log(user)
+          const checkDev = await prisma.developer.findFirst({
+               where:{
+                 userId:user.id
+               }
+             })
+         
+          if (checkDev !== null) {
+               res.json({token,
+                    message :"developer already exists",
+                          dev:"true"
+               })}else{
+                    res.json({token,
+                         message :"developer doesn't exists",
+                               dev:"false"
+                    }) 
+               }
 }
