@@ -67,6 +67,8 @@ export const signin = async (req, res) => {
          
           if (checkDev !== null) {
                res.json({token,
+                    id:checkDev.id,
+                    name: checkDev.dev_first_name,
                     message :"developer already exists",
                           dev:"true"
                })}else{
