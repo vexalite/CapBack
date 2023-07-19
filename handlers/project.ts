@@ -1,81 +1,72 @@
 import prisma from "../prisma/db"
 
-//get all
-// export const getProjects = async(req,res) =>{
-//  const project = await prisma.project.findMany({
-//      where:{
-//           counter: true
-//      }
-//  })
-//  res.json({data: project,})
-// }
 
 // get one
 
-export const getOneProject = async(req,res) =>{
-     const id = req.params.id
+export const getOneProject = async (req, res) => {
+  const id = req.params.id
 
-     const project = await prisma.project.findFirst({
-          where:{
-               id,
-               // belongsToId: req.user.id
+  const project = await prisma.project.findFirst({
+    where: {
+      id,
+      // belongsToId: req.user.id
 
-          },
-     })
-     res.json({data: project})
+    },
+  })
+  res.json({ data: project })
 }
 
 
 
-export const createProject = async (req,res)=>{
-     try{
-     if (!req.company || !req.company.id) {
-          // Handle the case when req.company or req.company.id is undefined
-          res.json({message:"company not signed in"})
-          console.log(req.company.id)
-          return
-        }
-     //    const find = prisma.company.findUnique({
-     //      where:{
-     //           id : req.params.id,
-     //      }
-     //    })
-     //    res.json({data :find})
-     const created = await prisma.project.create({
-         data: {
-             project_name: req.body.project_name,
-             timeframe: req.body.timeframe,
-             technology: req.body.technology,
-             description: req.body.description,
-             status:req.body.status,
-             price: parseInt(req.body.price),
-             devlist: req.body.devlist,
-             businessId: req.params.id
-         },
-     })
-     res.json({data :created})
-}catch(error) {
-     console.error('Error:', error)
-     res.status(500).json({ error: 'Internal server error' })
-   }
+export const createProject = async (req, res) => {
+  try {
+    if (!req.company || !req.company.id) {
+      // Handle the case when req.company or req.company.id is undefined
+      res.json({ message: "company not signed in" })
+      console.log(req.company.id)
+      return
+    }
+    //    const find = prisma.company.findUnique({
+    //      where:{
+    //           id : req.params.id,
+    //      }
+    //    })
+    //    res.json({data :find})
+    const created = await prisma.project.create({
+      data: {
+        project_name: req.body.project_name,
+        timeframe: req.body.timeframe,
+        technology: req.body.technology,
+        description: req.body.description,
+        status: req.body.status,
+        price: parseInt(req.body.price),
+        devlist: req.body.devlist,
+        businessId: req.params.id
+      },
+    })
+    res.json({ data: created })
+  } catch (error) {
+    console.error('Error:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
-export const updateProject = async (req,res)=>{
-     const updated = await prisma.project.update({
-          where:{
-               id : req.params.id
-               // belongsToId: req.user.id
-          },
-          data:{
-            project_name: req.body.project_name,
-             timeframe: req.body.timeframe,
-             technology: req.body.technology,
-             description: req.body.description,
-             price: parseInt(req.body.price),
-             devlist: req.body.devlist,
-          }
-     })
-     res.json({data :updated})
+export const updateProject = async (req, res) => {
+  const updated = await prisma.project.update({
+    where: {
+      id: req.params.id
+      // belongsToId: req.user.id
+    },
+    data: {
+      project_name: req.body.project_name,
+      timeframe: req.body.timeframe,
+      technology: req.body.technology,
+      description: req.body.description,
+      price: parseInt(req.body.price),
+      devlist: req.body.devlist,
+    }
+  })
+  res.json({ data: updated })
 }
 
 
@@ -111,26 +102,26 @@ export const patchProject = async (req, res) => {
 };
 
 
-export const deleteProject = async (req,res)=>{
-     try{
-          const checkorg = await prisma.business.findFirst({
-               where:{
-                 id: req.params.id
-               }
-             })
-             if(req.user.id !== checkorg.companyId){
-               res.status(400).json({'message': "invalid user"})
-             }else{
-     const deleted = await prisma.project.delete({
-          where:{
-               id : req.params.id
-               // belongsToId: req.user.id
-          },
-     })
-     res.json({data :deleted})
+export const deleteProject = async (req, res) => {
+  try {
+    const checkorg = await prisma.business.findFirst({
+      where: {
+        id: req.params.id
+      }
+    })
+    if (req.user.id !== checkorg.companyId) {
+      res.status(400).json({ 'message': "invalid user" })
+    } else {
+      const deleted = await prisma.project.delete({
+        where: {
+          id: req.params.id
+
+        },
+      })
+      res.json({ data: deleted })
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
-}catch(error) {
-     console.error('Error:', error)
-     res.status(500).json({ error: 'Internal server error' })
-   }
-   }
