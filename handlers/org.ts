@@ -75,7 +75,7 @@ export const updateCompany = async (req, res) => {
         id: req.params.id
       }
     })
-    if (req.user.id !== checkorg.companyId) {
+    if (req.company.id !== checkorg.companyId) {
       res.status(400).json({ 'message': "invalid user" })
     } else {
       const updated = await prisma.business.update({
