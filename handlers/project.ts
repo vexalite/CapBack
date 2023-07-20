@@ -52,6 +52,20 @@ export const createProject = async (req, res) => {
 }
 
 export const updateProject = async (req, res) => {
+  try {
+    const checkpro = await prisma.project.findFirst({
+      where: {
+        id: req.params.id
+      }
+    })
+    const checkorg = await prisma.business.findFirst({
+      where: {
+        id: checkpro.businessId
+      }
+    })
+    if (req.company.id !== checkorg.companyId) {
+      res.status(400).json({ 'message': "invalid user" })
+    } else {
   const updated = await prisma.project.update({
     where: {
       id: req.params.id
@@ -67,6 +81,12 @@ export const updateProject = async (req, res) => {
     }
   })
   res.json({ data: updated })
+}
+  }
+catch (error) {
+  console.error('Error:', error)
+  res.status(500).json({ error: 'Internal server error' })
+}
 }
 
 
@@ -104,9 +124,14 @@ export const patchProject = async (req, res) => {
 
 export const deleteProject = async (req, res) => {
   try {
-    const checkorg = await prisma.business.findFirst({
+    const checkpro = await prisma.project.findFirst({
       where: {
         id: req.params.id
+      }
+    })
+    const checkorg = await prisma.business.findFirst({
+      where: {
+        id: checkpro.businessId
       }
     })
     if (req.company.id !== checkorg.companyId) {
