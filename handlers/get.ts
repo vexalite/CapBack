@@ -124,7 +124,7 @@ export const getPriceDescDevelopers = async (req, res) => {
 export const getAscProjects = async (req, res) => {
   const project = await prisma.project.findMany({
     orderBy: {
-      createdAt: 'desc',
+      createdAt: 'asc',
     }
   })
   res.json({ data: project, })
