@@ -16,7 +16,7 @@ userRouter.patch('/project/:id',
     handleInputErrors, patchProject)
 
 
-userRouter.patch('rateorg/:id', patchBusiness)
+userRouter.patch('/rateorg/:id', patchBusiness)
 ///////////////////////////////////////         Developer Routes            ///////////////////////////
 
 userRouter.post('/dev',
